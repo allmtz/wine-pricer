@@ -40,13 +40,13 @@ function App() {
       </form>
 
       <div>
-        {Object.keys(searchResults).map((k) => (
-          <>
+        {Object.keys(searchResults).map((k, i) => (
+          <div key={i}>
             <h2>{k}</h2>
             {searchResults[k].map((i) => (
               <p>{`${i[0]} $${i[1]}`}</p>
             ))}
-          </>
+          </div>
         ))}
       </div>
     </>
