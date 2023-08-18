@@ -6,7 +6,7 @@
 
 ## Example search result
 
-![Searching for "cru"](./project-pics/cru.png)
+![Searching for "cru"](./project-pics/screenshot.png)
 
 ## Setup steps
 
