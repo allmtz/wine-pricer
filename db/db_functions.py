@@ -3,8 +3,6 @@ from sqlite3 import Error, Connection
 import os
 
 
-# TODO  move the empty string check and quotation mark removal into txtParsers.py
-
 def createConnection(path='./db/test.db'):
     cx = None
     try:
@@ -51,10 +49,7 @@ def iterateOverParsedFiles(connection: Connection):
             restaurant = filename[:-4].replace('-', '')
             createTable(connection, restaurant)
 
-            txt = open(filePath).read()
-
-            # Remove all quotation marks
-            lines = txt.replace('\'', '').replace('"', '').splitlines()
+            lines = open(filePath).read().splitlines()
 
             for line in lines:
                 name, sep,  price = line.partition('$')
@@ -63,7 +58,9 @@ def iterateOverParsedFiles(connection: Connection):
                 price = price.strip()
 
                 if name != '' and price != '':
+                    # Create record
                     insertIntoTable = f'INSERT INTO {restaurant}(name,price) VALUES ("{name}", "{price}");'
+                    # print(name, price) # Useful for determining which queries failed
                     executeQuery(connection, insertIntoTable)
 
 

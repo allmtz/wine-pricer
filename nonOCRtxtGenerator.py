@@ -1,5 +1,6 @@
 import PyPDF2
 import re
+from txtParsers import removeQuotationMarks
 
 
 def mustardsParser():
@@ -32,7 +33,7 @@ def mustardsParser():
 
     # Save the generated text
     with open('./menus/parsed/Mustards.txt', 'w') as file:
-        file.write(final)
+        file.write(removeQuotationMarks(final.strip()))
         print('Mustards file saved')
 
 

@@ -10,6 +10,11 @@ def saveAsTxtFile(content: str, title: str):
         print(f'{title} file saved')
 
 
+def removeQuotationMarks(s):
+    quotatioMarksRegx = r'[\'"]'
+    return re.sub(quotatioMarksRegx, "", s)
+
+
 # Could be more efficient by using a better regex to filter out the useless characters between the wine info and the price.
 # Could also look into improving OCR results as that would make it much easier to parse the generated text.
 def bhParser():
@@ -41,7 +46,7 @@ def bhParser():
             dollarIdx = line.find("$")
             finalString += f'{line[0:twoDotsIdx]}  {line[dollarIdx:]}\n'
 
-    return finalString.strip()
+    return removeQuotationMarks(finalString.strip())
 
 
 def RDparser():
@@ -69,7 +74,7 @@ def RDparser():
             s = line[:line.find(match.group())] + "$" + match.group() + '\n'
             finalString += s
 
-    return finalString.strip()
+    return removeQuotationMarks(finalString.strip())
 
 
 # saveAsTxtFile(bhParser(), "Bounty-Hunter")
