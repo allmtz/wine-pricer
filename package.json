@@ -1,0 +1,15 @@
+{
+  "name": "wine-pricer",
+  "version": "0.0.1",
+  "description": "A wine price comparison application",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/allmtz/wine-pricer"
+  },
+  "scripts": {
+    "test": "echo WIP",
+    "dev": "npm --prefix ./client run dev"
+  },
+  "license": "ISC"
+}

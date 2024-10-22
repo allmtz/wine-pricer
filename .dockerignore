@@ -1,0 +1,13 @@
+
+node_modules
+./client/node_modules
+
+
+.vscode
+.git
+.DS_Store
+
+# not used by client
+db
+project-pics
+menus
