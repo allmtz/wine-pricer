@@ -20,13 +20,13 @@ Uncomment the following line
 
 located at the end of `db_functions.py`. After that, execute the file.
 
-### 2. Start the server
+### 2. Start the frontend and API with Docker
 
-Execute `api.py`.
+Make sure you're in the root directory.
+Execute `docker compose up`
 
-### 3. Start the client
-
-`cd` into the `client` directory and run `$ npm run dev`.
+The app should now be accessible at http://localhost:3030
+and the API at http://localhost:5001
 
 ## Developer Notes
 
