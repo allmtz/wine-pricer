@@ -3,7 +3,7 @@ from sqlite3 import Error, Connection
 import os
 
 
-def createConnection(path='./db/test.db'):
+def createConnection(path='./test.db'):
     cx = None
     try:
         cx = sqlite3.connect(path)
