@@ -36,7 +36,7 @@ Some things to keep in mind for those looking to contribute.
 
 - Parsed files must have a dollar sign to delimit the wine name and price. This is essential to be able to extract this information and sucessfully insert it into the database.
 
-### Ideally
+### Formatting
 
 Parsed files should also have:
 
