@@ -11,8 +11,10 @@ function App() {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const host = import.meta.env.VITE_HOST;
+    const port = import.meta.env.VITE_PORT;
 
-    fetch(`http://127.0.0.1:5000/search/all/${input}`)
+    fetch(`http://${host}:${port}/search/all/${input}`)
       .then((res) => res.json())
       .then((data) => {
         setSearchResults(data);
