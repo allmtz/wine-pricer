@@ -12,9 +12,11 @@ function App() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const host = import.meta.env.VITE_HOST;
-    const port = import.meta.env.VITE_PORT;
+    // const port = import.meta.env.VITE_PORT;
+    const protocol = import.meta.env.VITE_PROTOCOL;
 
-    fetch(`http://${host}:${port}/search/all/${input}`)
+    // TODO : configure this endpoint to be env based
+    fetch(`${protocol}://${host}/search/all/${input}`)
       .then((res) => res.json())
       .then((data) => {
         setSearchResults(data);
