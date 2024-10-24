@@ -9,7 +9,9 @@
   },
   "scripts": {
     "test": "echo WIP",
-    "dev": "npm --prefix ./client run dev"
+    "dev": "npm --prefix ./client run dev",
+    "build": " docker buildx build --platform linux/amd64,linux/arm64 -t allmtz/wine-api:latest ./db && docker buildx build --platform linux/amd64,linux/arm64 -t allmtz/wine-ui:latest .",
+    "build-push": " docker buildx build --platform linux/amd64,linux/arm64 -t allmtz/wine-api:latest --push ./db && docker buildx build --platform linux/amd64,linux/arm64 -t allmtz/wine-ui:latest --push ."
   },
   "license": "ISC"
 }

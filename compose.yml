@@ -1,12 +1,12 @@
 services:
   ui:
-    build: .
+    image: allmtz/wine-ui
     ports:
       - "3030:5173" # Make Vite frontend accessible on localhost port
     depends_on:
       - api # ui service will wait for api to be ready
 
   api:
-    build: ./db
+    image: allmtz/wine-api
     ports:
       - "5001:5000" # Map a host port to container api port
