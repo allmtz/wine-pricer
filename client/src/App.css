@@ -16,3 +16,10 @@
   background-color: #1a1a1a;
   transition: border-color 0.25s;
 }
+
+/* Styles for light mode */
+@media (prefers-color-scheme: light) {
+  .search-box {
+    color: whitesmoke;
+  }
+}
