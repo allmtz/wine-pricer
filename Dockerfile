@@ -21,4 +21,5 @@ RUN npm --prefix ./client install
 USER app
 
 # Start the app
+# The dev script exposes Vite on its default port
 CMD ["npm", "run", "dev"]
