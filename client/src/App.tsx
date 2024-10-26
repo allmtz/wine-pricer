@@ -3,6 +3,10 @@ import "./App.css";
 
 type Restaurant = string;
 
+const ENV = import.meta.env;
+const HOST = ENV.VITE_ENV == "prod" ? ENV.VITE_PROD_HOST : ENV.VITE_DEV_HOST;
+const PROTOCOL = ENV.VITE_ENV == "prod" ? "https" : "http";
+
 function App() {
   const [input, setInput] = useState("");
   const [searchResults, setSearchResults] = useState<
@@ -11,12 +15,9 @@ function App() {
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const host = import.meta.env.VITE_HOST;
-    // const port = import.meta.env.VITE_PORT;
-    const protocol = import.meta.env.VITE_PROTOCOL;
 
-    // TODO : configure this endpoint to be env based
-    fetch(`${protocol}://${host}/search/all/${input}`)
+    // adjust endpoint based on environment
+    fetch(`${PROTOCOL}://${HOST}/search/all/${input}`)
       .then((res) => res.json())
       .then((data) => {
         setSearchResults(data);
@@ -31,6 +32,7 @@ function App() {
 
   return (
     <>
+      {/* <h1>{test}</h1> */}
       <h1 className="title">What are you looking for?</h1>
       <form onSubmit={handleSubmit}>
         <input
