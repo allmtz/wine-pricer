@@ -19,3 +19,10 @@ services:
     build: ./db
     ports:
       - "5001:5000" # Map a host port to container api port
+    develop:
+      watch:
+        - action: sync
+          path: ./db
+          target: /app/db
+        - action: rebuild # packages can be arch dependent -> need to rebuild if they change. See https://docs.docker.com/compose/how-tos/file-watch/
+          path: requirements.txt
