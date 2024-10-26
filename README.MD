@@ -30,6 +30,10 @@ and the API at http://localhost:5001
 
 ## Developer Notes
 
+To enable hot reloading while developing, start the app by running
+` $ docker compose watch`
+This will run the ui and api locally
+
 Some things to keep in mind for those looking to contribute.
 
 ### Mandatory
