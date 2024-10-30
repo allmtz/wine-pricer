@@ -3,6 +3,8 @@ from sqlite3 import Error, Connection
 import os
 
 
+# TODO remove inline file paths
+
 def createConnection(path='./test.db'):
     cx = None
     try:
@@ -14,31 +16,35 @@ def createConnection(path='./test.db'):
     return cx
 
 
-def executeQuery(connection: Connection, query: str):
+def executeQuery(connection: Connection, query: str, params):
     try:
-        cu = connection.execute(query)
+        cu = connection.execute(query, params)
         connection.commit()
         print('Query successful')
         return cu
     except Error:
-        print(f'The error {Error} occured')
+        print(f'The error {Error} occured. Query: {query} Params: {params}')
 
 
-def createTable(connection: Connection, tableName: str):
-    # 'tableName' must be a valid sqlite table name
-    createTable = f'''CREATE TABLE {tableName}(
+def createTable(connection: Connection):
+    createTable = f'''CREATE TABLE IF NOT EXISTS wines(
                             id INTEGER PRIMARY KEY,
                             name TEXT NOT NULL,
-                            price TEXT
-                        ) 
+                            price TEXT,
+                            restaurant TEXT,
+                            varietal TEXT DEFAULT '',
+                            vintage INTEGER DEFAULT -1,
+                            added DATE DEFAULT (date()),
+                            modified DATE DEFAULT (date())
+                        );
                     '''
-    executeQuery(connection, createTable)
+    executeQuery(connection, createTable, [])
 
 
 def iterateOverParsedFiles(connection: Connection):
-    folder_path = './menus/parsed'
+    folder_path = '../menus/parsed'
 
-    # TODO Reduce nesting. store filepaths in an array and iterate over that?
+    # TODO Reduce nesting
 
     # Iterate over the parsed menus
     for filename in os.listdir(folder_path):
@@ -46,8 +52,7 @@ def iterateOverParsedFiles(connection: Connection):
 
         if os.path.isfile(filePath):
             # Assuming all files end in '.txt'
-            restaurant = filename[:-4].replace('-', '')
-            createTable(connection, restaurant)
+            restaurant = filename[:-4].replace('-', ' ')
 
             lines = open(filePath).read().splitlines()
 
@@ -59,28 +64,29 @@ def iterateOverParsedFiles(connection: Connection):
 
                 if name != '' and price != '':
                     # Create record
-                    insertIntoTable = f'INSERT INTO {restaurant}(name,price) VALUES ("{name}", "{price}");'
-                    # print(name, price) # Useful for determining which queries failed
-                    executeQuery(connection, insertIntoTable)
+                    insertIntoTable = f'INSERT INTO wines(name,price,restaurant,modified) VALUES (?, ?, ?, date());'
+
+                    # print(name, price, restaurant) # Useful for determining which queries failed
+                    executeQuery(connection, insertIntoTable,
+                                 [name, price, restaurant])
 
 
-def searchAllTables(connection: Connection, substr: str) -> dict:
-    res = {}
-
-    # Query the sqlite_master table to get all table names
-    getTableNames = f'SELECT name FROM sqlite_master WHERE type="table";'
-
-    # 'tables' is a list of tuples
-    tables = executeQuery(connection, getTableNames).fetchall()
-
-    for table in tables:
-        tableName = table[0]
-        findWine = f'SELECT name, price FROM {tableName} WHERE name LIKE "%{substr}%";'
-
-        res[tableName] = executeQuery(connection, findWine).fetchall()
-
-    return res
+def findSubstring(connection: Connection, substr: str) -> dict:
+    findWines = f'SELECT name, price, restaurant FROM wines WHERE name LIKE "%{substr}%";'
+    return executeQuery(connection, findWines)
 
 
-# Uncomment to create tables and records for each file
-# iterateOverParsedFiles(createConnection())
+def initializeDatabase(path='test.db'):
+    con = createConnection(path)
+    createTable(con)
+    iterateOverParsedFiles(con)
+    con.close()
+
+
+def main():
+    if not os.path.isfile("test.db"):
+        # initialize db with default path if it does not exist
+        initializeDatabase()
+
+
+main()

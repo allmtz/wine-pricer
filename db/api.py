@@ -1,5 +1,5 @@
 import flask
-from db_functions import searchAllTables, createConnection
+from db_functions import createConnection, findSubstring
 from flask_cors import CORS
 
 app = flask.Flask(__name__)
@@ -10,7 +10,8 @@ CORS(app)
 
 @app.route('/search/all/<s>', methods=['GET'])
 def getMatches(s: str):
-    matches = searchAllTables(createConnection("/api/test.db"), s)
+    con = createConnection("/api/test.db")
+    matches = findSubstring(con, s)
     return matches
 
 
