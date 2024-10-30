@@ -1,4 +1,5 @@
 import flask
+from flask import jsonify
 from db_functions import createConnection, findSubstring
 from flask_cors import CORS
 
@@ -10,9 +11,11 @@ CORS(app)
 
 @app.route('/search/all/<s>', methods=['GET'])
 def getMatches(s: str):
-    con = createConnection("/api/test.db")
+    con = createConnection("./db/test.db")
+    if not con:
+        print("could not connect to db, make sure path is correct")
     matches = findSubstring(con, s)
-    return matches
+    return jsonify(matches.fetchall())
 
 
 if __name__ == '__main__':

@@ -1,7 +1,5 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import "./App.css";
-
-type Restaurant = string;
 
 const ENV = import.meta.env;
 const HOST = ENV.VITE_ENV == "prod" ? ENV.VITE_PROD_HOST : ENV.VITE_DEV_HOST;
@@ -9,9 +7,7 @@ const PROTOCOL = ENV.VITE_ENV == "prod" ? "https" : "http";
 
 function App() {
   const [input, setInput] = useState("");
-  const [searchResults, setSearchResults] = useState<
-    Record<Restaurant, string[][]>
-  >({});
+  const [searchResults, setSearchResults] = useState<string[][]>([]);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -21,6 +17,7 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
         setSearchResults(data);
+        // console.log(data);
       });
 
     setInput("");
@@ -28,6 +25,38 @@ function App() {
 
   function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     setInput(e.target.value);
+  }
+
+  function formatResults(): ReactNode {
+    let currentResaurant = "";
+
+    // searchResult is an array of string arrays
+    return searchResults.map((r, i) => {
+      const name = r[0] || "";
+      const price = r[1] || "";
+      const restaurant = r[2] || "";
+
+      // when we switch restaurants print the new restaurant header
+      if (currentResaurant !== restaurant) {
+        // update the currentRestaurant
+        currentResaurant = restaurant;
+        return (
+          <div>
+            <h2>{restaurant}</h2>
+            <p>
+              {name} {price}
+            </p>
+          </div>
+        );
+      }
+
+      // print a regular item
+      return (
+        <p key={i}>
+          {name} {price}
+        </p>
+      );
+    });
   }
 
   return (
@@ -45,16 +74,7 @@ function App() {
         <button type="submit">Submit</button>
       </form>
 
-      <div>
-        {Object.keys(searchResults).map((k, i) => (
-          <div key={i}>
-            <h2>{k}</h2>
-            {searchResults[k].map((i) => (
-              <p>{`${i[0]} $${i[1]}`}</p>
-            ))}
-          </div>
-        ))}
-      </div>
+      <div>{formatResults()}</div>
     </>
   );
 }

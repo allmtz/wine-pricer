@@ -5,7 +5,10 @@ import os
 
 # TODO remove inline file paths
 
-def createConnection(path='./test.db'):
+pathToTestDB = "./db/test.db"
+
+
+def createConnection(path=pathToTestDB):
     cx = None
     try:
         cx = sqlite3.connect(path)
@@ -16,7 +19,7 @@ def createConnection(path='./test.db'):
     return cx
 
 
-def executeQuery(connection: Connection, query: str, params):
+def executeQuery(connection: Connection, query: str, params=[]):
     try:
         cu = connection.execute(query, params)
         connection.commit()
@@ -42,7 +45,7 @@ def createTable(connection: Connection):
 
 
 def iterateOverParsedFiles(connection: Connection):
-    folder_path = '../menus/parsed'
+    folder_path = './menus/parsed'
 
     # TODO Reduce nesting
 
@@ -72,11 +75,11 @@ def iterateOverParsedFiles(connection: Connection):
 
 
 def findSubstring(connection: Connection, substr: str) -> dict:
-    findWines = f'SELECT name, price, restaurant FROM wines WHERE name LIKE "%{substr}%";'
-    return executeQuery(connection, findWines)
+    findWines = f'SELECT name, price, restaurant FROM wines WHERE name LIKE "%{substr}%" ORDER BY restaurant;'
+    return executeQuery(connection, findWines, [])
 
 
-def initializeDatabase(path='test.db'):
+def initializeDatabase(path):
     con = createConnection(path)
     createTable(con)
     iterateOverParsedFiles(con)
@@ -84,9 +87,9 @@ def initializeDatabase(path='test.db'):
 
 
 def main():
-    if not os.path.isfile("test.db"):
+    if not os.path.isfile(pathToTestDB):
         # initialize db with default path if it does not exist
-        initializeDatabase()
+        initializeDatabase(pathToTestDB)
 
 
 main()
