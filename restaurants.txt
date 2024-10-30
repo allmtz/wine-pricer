@@ -1,0 +1,6 @@
+goose
+farmstead   cant find their wine menu online
+cooks       needs to be scraped : https://cookstavern.com/menu
+brasswood   workable, menu format might be hard to parse, similar to R&D menu
+jeanty      can be scraped, lots of listings: http://bw-winelist-website-prod.s3-website-us-west-2.amazonaws.com/88e2ea0c-8997-4294-a420-bbe671780f25-prod/#/88e2ea0c-8997-4294-a420-bbe671780f25/9#Wines%20By%20The%20Glass-header1
+celadon     has split and cleanly formated menus for whites and reds but theyre pngs : https://www.celadonnapa.com/wp-content/uploads/2023/04/wine-list-red-03-22-18-DESKTOP-ICB8QV7.png
