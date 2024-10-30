@@ -63,7 +63,7 @@ def RDparser():
     # Cut out the unrelated info
     wineSection = txt[wineStart:wineEnd].split('\n')
 
-    # Regex to match prices and prices in the format "glass/bottle"
+    # Regex to match prices and prices in the format "glass/bottle" or any number of digits
     hasPrice = r'\d+\/\d+|\d+'
 
     for line in wineSection:
@@ -77,5 +77,33 @@ def RDparser():
     return removeQuotationMarks(finalString.strip())
 
 
+def CooksParser():
+    try:
+        txt = open('./menus/text/Cooks-Tavern.txt').read()
+    except:
+        print('Make sure the file being opened exists')
+
+    finalString = ''
+
+    # Regex to match prices in the format "glass/bottle" or "xx"
+    hasPrice = r'\d+\/\d+|\d\d'
+
+    for line in txt.split("\n"):
+        # simplifies regex, avoids having to differentiate between dates and prices
+        # will slice prices up to format "xxx/xx"
+        priceSection = line[-6:]
+
+        match = re.search(hasPrice, priceSection)
+        if match:
+            # Add a dollar before the price
+            s = priceSection[:priceSection.find(
+                match.group())] + "$" + match.group() + '\n'
+
+            # patch the line with the "$" added price
+            finalString += line[:-6] + s
+    return removeQuotationMarks(finalString.strip())
+
+
 # saveAsTxtFile(bhParser(), "Bounty-Hunter")
 # saveAsTxtFile(RDparser(), 'RD')
+# saveAsTxtFile(CooksParser(), 'Cooks-Tavern')
