@@ -2,10 +2,8 @@ import sqlite3
 from sqlite3 import Error, Connection
 import os
 
-
-# TODO remove inline file paths
-
-pathToTestDB = "./db/test.db"
+# Define a relative path to the db
+pathToTestDB = "./test.db"
 
 
 def createConnection(path=pathToTestDB):
@@ -96,4 +94,5 @@ def main():
     initializeDatabase(pathToTestDB)
 
 
-main()
+# uncommenting main() breaks docker compose watch
+# main()

@@ -11,7 +11,8 @@ CORS(app)
 
 @app.route('/search/all/<s>', methods=['GET'])
 def getMatches(s: str):
-    con = createConnection("./db/test.db")
+    # this should be the same as pathToTestDB
+    con = createConnection("./test.db")
     if not con:
         print("could not connect to db, make sure path is correct")
     matches = findSubstring(con, s)
