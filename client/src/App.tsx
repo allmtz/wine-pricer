@@ -73,6 +73,7 @@ function App() {
         />
         <button type="submit">Submit</button>
       </form>
+      <p>{searchResults.length} Results</p>
 
       <div>{formatResults()}</div>
     </>
