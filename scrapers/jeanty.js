@@ -2,7 +2,7 @@ const fs = require("fs");
 
 // menu endpoint: http://bw-winelist-website-prod.s3-website-us-west-2.amazonaws.com/88e2ea0c-8997-4294-a420-bbe671780f25-prod/menu-88e2ea0c-8997-4294-a420-bbe671780f25.json?nocache=1730666419781
 
-// carefull hitting this, prefer reading the info in from jeanty.js
+// carefull hitting this, prefer reading the info in from jeanty.json
 async function getMenu() {
   const endpoint =
     "http://bw-winelist-website-prod.s3-website-us-west-2.amazonaws.com/88e2ea0c-8997-4294-a420-bbe671780f25-prod/menu-88e2ea0c-8997-4294-a420-bbe671780f25.json?nocache=1730666419781";
