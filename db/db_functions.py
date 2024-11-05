@@ -93,7 +93,7 @@ def initializeDatabase(path):
 
 
 def main():
-    initializeDatabase()
+    initializeDatabase(pathToTestDB)
 
 
 main()
