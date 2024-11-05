@@ -25,8 +25,9 @@ def executeQuery(connection: Connection, query: str, params=[]):
         connection.commit()
         print('Query successful')
         return cu
-    except Error:
-        print(f'The error {Error} occured. Query: {query} Params: {params}')
+    except sqlite3.Error as err:
+        print(
+            f'The error {err.sqlite_errorname}({err.sqlite_errorcode}) occured. Query: {query} Params: {params}')
 
 
 def createTable(connection: Connection):
@@ -38,7 +39,8 @@ def createTable(connection: Connection):
                             varietal TEXT DEFAULT '',
                             vintage INTEGER DEFAULT -1,
                             added DATE DEFAULT (date()),
-                            modified DATE DEFAULT (date())
+                            modified DATE DEFAULT (date()),
+                            UNIQUE(name,restaurant)
                         );
                     '''
     executeQuery(connection, createTable, [])
@@ -54,7 +56,7 @@ def iterateOverParsedFiles(connection: Connection):
         filePath = f'{folder_path}/{filename}'
 
         if os.path.isfile(filePath):
-            # Assuming all files end in '.txt'
+            # remove the '.txt' extension and replace seperators with spaces
             restaurant = filename[:-4].replace('-', ' ')
 
             lines = open(filePath).read().splitlines()
@@ -67,7 +69,11 @@ def iterateOverParsedFiles(connection: Connection):
 
                 if name != '' and price != '':
                     # Create record
-                    insertIntoTable = f'INSERT INTO wines(name,price,restaurant,modified) VALUES (?, ?, ?, date());'
+                    insertIntoTable = f'''INSERT INTO wines(name, price, restaurant)
+                                            VALUES (?, ?, ?)
+                                            ON CONFLICT(name,restaurant) DO NOTHING
+                                            ;
+                                        '''
 
                     # print(name, price, restaurant) # Useful for determining which queries failed
                     executeQuery(connection, insertIntoTable,
@@ -87,9 +93,7 @@ def initializeDatabase(path):
 
 
 def main():
-    if not os.path.isfile(pathToTestDB):
-        # initialize db with default path if it does not exist
-        initializeDatabase(pathToTestDB)
+    initializeDatabase()
 
 
 main()
